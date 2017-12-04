@@ -23,34 +23,31 @@ namespace AdventOfCode2017.Puzzles.Day3
             bool didInc = true;
             var direction = Direction.Right;
 
-            while (cVal <= inpt)
+            while (cVal < inpt)
             {
                 memory[(xPos, yPos)] = cVal++;
 
-                nextTurnAt += tInc;
-                tInc += didInc ? 0 : 1;
-                didInc = !didInc;
                 if (currTurnAt++ == nextTurnAt)
                 {
                     switch (direction)
                     {
                         case Direction.Up:
-                            direction = Direction.Left;
-                            lastTurnAt = cVal - 1;
+                            direction = Direction.Left;                            
                             break;
                         case Direction.Down:
-                            direction = Direction.Right;
-                            lastTurnAt = cVal - 1;
+                            direction = Direction.Right;                            
                             break;
                         case Direction.Left:
-                            direction = Direction.Down;
-                            lastTurnAt = cVal - 1;
+                            direction = Direction.Down;                            
                             break;
                         case Direction.Right:
-                            direction = Direction.Up;
-                            lastTurnAt = cVal - 1;
+                            direction = Direction.Up;                            
                             break;
                     }
+                    lastTurnAt = cVal - 1;
+                    tInc += didInc ? 0 : 1;
+                    didInc = !didInc;
+                    nextTurnAt = currTurnAt + tInc;
                 }
 
                 switch (direction)
@@ -70,7 +67,9 @@ namespace AdventOfCode2017.Puzzles.Day3
                 }
             }
 
-            return 0.ToString();
+            var res = Math.Abs(xPos - yPos);
+
+            return res.ToString();
         }
     }
 

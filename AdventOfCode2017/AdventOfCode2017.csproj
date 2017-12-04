@@ -9,8 +9,4 @@
     <None Remove="Puzzles\Template.txt" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Include="Puzzles\Template.txt" />
-  </ItemGroup>
-
 </Project>
