@@ -5,4 +5,12 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Puzzles\Template.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Puzzles\Template.txt" />
+  </ItemGroup>
+
 </Project>
