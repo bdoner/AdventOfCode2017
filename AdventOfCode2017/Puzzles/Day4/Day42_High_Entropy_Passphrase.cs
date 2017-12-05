@@ -20,7 +20,7 @@ namespace AdventOfCode2017.Puzzles.Day4
                 if(passphrase.GroupBy(k => k).Any(q => q.Count() > 1))
                     continue;
                 
-                if(passphrase.Select(p => p.OrderBy(k => k)).GroupBy(k => k).All(q => q.Count() == 1))
+                if(passphrase.Select(p => string.Join("", p.OrderBy(k => k))).GroupBy(k => k).All(q => q.Count() == 1))
                     count++;
             }
 
