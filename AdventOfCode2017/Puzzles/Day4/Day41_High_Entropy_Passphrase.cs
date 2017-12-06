@@ -6,7 +6,7 @@ using System.Text;
 
 namespace AdventOfCode2017.Puzzles.Day4
 {
-    public class Day51_A_Maze_Of_Twisty_Trampolines_All_Alike : IPuzzle
+    public class Day41_High_Entropy_Passphrase : IPuzzle
     {
         public string Run()
         {
