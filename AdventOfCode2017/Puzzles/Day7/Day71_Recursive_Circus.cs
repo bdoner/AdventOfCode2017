@@ -13,7 +13,7 @@ namespace AdventOfCode2017.Puzzles.Day7
         public string Run()
         {
             var programs =
-                File.ReadAllLines("Puzzles\\Day7\\input.txt")
+                File.ReadAllLines("Puzzles\\Day7\\input_example.txt")
                 .Select(ParseLine)
                 .ToList();
 
@@ -25,16 +25,16 @@ namespace AdventOfCode2017.Puzzles.Day7
             }
 
 
-
             return programs.Single().Name;
         }
+        
 
         void ResolveChildNames(Program program, List<Program> programs)
         {
             foreach (var name in program.ChildNames)
             {
                 var p = FindProgramByName(name, programs);
-                if (p == null) continue; 
+                if (p == null) continue;
                 if (p.Moved) continue;
 
                 programs.Remove(p);
@@ -101,11 +101,18 @@ namespace AdventOfCode2017.Puzzles.Day7
         }
     }
 
-    [DebuggerDisplay("Name = {Name}, Children = {Children.Count}, ChildNames = {ChildNames.Count}, Moved = {Moved}")]
+    [DebuggerDisplay("Name = {Name}, Children = {Children.Count}, WeightSum = {WeightSum}")]
     class Program
     {
         public string Name { get; set; }
         public int Weight { get; set; }
+        public int WeightSum
+        {
+            get
+            {
+                return this.Weight + this.Children.Sum(q => q.WeightSum);
+            }
+        }
         public bool Moved { get; set; }
         public List<Program> Children { get; set; }
         public List<string> ChildNames { get; set; }
