@@ -13,7 +13,7 @@ namespace AdventOfCode2017.Puzzles.Day7
         public string Run()
         {
             var programs =
-                File.ReadAllLines("Puzzles\\Day7\\input_example.txt")
+                File.ReadAllLines("Puzzles\\Day7\\input.txt")
                 .Select(ParseLine)
                 .ToList();
 
@@ -24,23 +24,25 @@ namespace AdventOfCode2017.Puzzles.Day7
                 if (programs.Count != pbc) i = 0;
             }
 
-            PrintWeights(programs);
+            var groups = new List<IEnumerable<IGrouping<int, Program>>>();
+            GroupWeights(programs, groups);
+            var imbalancedGroup = groups.Where(q => q.Count() != 1).ToList();
+            var fg = imbalancedGroup.First();
+            var lg = imbalancedGroup.Last();
 
 
             return programs.Single().Name;
         }
 
-        void PrintWeights(List<Program> programs)
+        void GroupWeights(List<Program> programs, List<IEnumerable<IGrouping<int, Program>>> groups)
         {
-            foreach (var p in programs)
-            {
-                Console.WriteLine($"{p.Name}: {p.WeightSum}");
-            }
-            Console.WriteLine("--------");
+            if(programs.Count > 0)
+                groups.Add(programs.GroupBy(q => q.WeightSum));
 
             foreach (var p in programs)
             {
-                PrintWeights(p.Children);
+                
+                GroupWeights(p.Children, groups);
             }
         }
 
