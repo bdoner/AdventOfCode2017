@@ -13,13 +13,58 @@ namespace AdventOfCode2017.Puzzles.Day8
         public string Run()
         {
             var instructions =
-                File.ReadAllLines("Puzzles\\Day8\\input_example.txt")
+                File.ReadAllLines("Puzzles\\Day8\\input.txt")
                 .Select(ParseLine)
                 .ToList();
 
-            return instructions.Count.ToString();
+            var registers = new Dictionary<string, int>();
+            instructions.ForEach(i =>
+            {
+                if (!registers.ContainsKey(i.Register)) registers.Add(i.Register, 0);
+                if (!registers.ContainsKey(i.CompReg)) registers.Add(i.CompReg, 0);
+            });
+            foreach (var inst in instructions)
+            {
+                var compRegVal = registers[inst.CompReg];
+                bool shouldChange = false;
+                switch (inst.Comparer)
+                {
+                    case Comparer.GreaterThan:
+                        shouldChange = compRegVal > inst.CompVal;
+                        break;
+                    case Comparer.LessThan:
+                        shouldChange = compRegVal < inst.CompVal;
+                        break;
+                    case Comparer.Equal:
+                        shouldChange = compRegVal == inst.CompVal;
+                        break;
+                    case Comparer.LessThanOrEqual:
+                        shouldChange = compRegVal <= inst.CompVal;
+                        break;
+                    case Comparer.GreaterThanOrEqual:
+                        shouldChange = compRegVal >= inst.CompVal;
+                        break;
+                    case Comparer.NotEqual:
+                        shouldChange = compRegVal != inst.CompVal;
+                        break;
+                }
+
+                if (!shouldChange) continue;
+
+                switch (inst.Operation)
+                {
+                    case Operation.Dec:
+                        registers[inst.Register] -= inst.Value;
+                        break;
+                    case Operation.Inc:
+                        registers[inst.Register] += inst.Value;
+                        break;
+                }
+            }
+
+            return registers.OrderByDescending(r => r.Value).First().Value.ToString();
         }
-        
+
 
         Instruction ParseLine(string line)
         {
@@ -42,7 +87,7 @@ namespace AdventOfCode2017.Puzzles.Day8
                 case ">":
                     return Comparer.GreaterThan;
                 case "<":
-                    return Comparer.LessThank;
+                    return Comparer.LessThan;
                 case ">=":
                     return Comparer.GreaterThanOrEqual;
                 case "==":
@@ -79,7 +124,7 @@ namespace AdventOfCode2017.Puzzles.Day8
     enum Comparer
     {
         GreaterThan,
-        LessThank,
+        LessThan,
         Equal,
         LessThanOrEqual,
         GreaterThanOrEqual,

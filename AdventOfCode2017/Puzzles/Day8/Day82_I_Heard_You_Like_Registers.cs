@@ -12,17 +12,65 @@ namespace AdventOfCode2017.Puzzles.Day8
     {
         public string Run()
         {
-            var programs =
+            var instructions =
                 File.ReadAllLines("Puzzles\\Day8\\input.txt")
                 .Select(ParseLine)
                 .ToList();
-            
 
-            return 0.ToString() ;
+            int topValue = 0;
+            var registers = new Dictionary<string, int>();
+            instructions.ForEach(i =>
+            {
+                if (!registers.ContainsKey(i.Register)) registers.Add(i.Register, 0);
+                if (!registers.ContainsKey(i.CompReg)) registers.Add(i.CompReg, 0);
+            });
+            foreach (var inst in instructions)
+            {
+                var compRegVal = registers[inst.CompReg];
+                bool shouldChange = false;
+                switch (inst.Comparer)
+                {
+                    case Comparer.GreaterThan:
+                        shouldChange = compRegVal > inst.CompVal;
+                        break;
+                    case Comparer.LessThan:
+                        shouldChange = compRegVal < inst.CompVal;
+                        break;
+                    case Comparer.Equal:
+                        shouldChange = compRegVal == inst.CompVal;
+                        break;
+                    case Comparer.LessThanOrEqual:
+                        shouldChange = compRegVal <= inst.CompVal;
+                        break;
+                    case Comparer.GreaterThanOrEqual:
+                        shouldChange = compRegVal >= inst.CompVal;
+                        break;
+                    case Comparer.NotEqual:
+                        shouldChange = compRegVal != inst.CompVal;
+                        break;
+                }
+
+                if (!shouldChange) continue;
+
+                switch (inst.Operation)
+                {
+                    case Operation.Dec:
+                        registers[inst.Register] -= inst.Value;
+                        break;
+                    case Operation.Inc:
+                        registers[inst.Register] += inst.Value;
+                        break;
+                }
+                if (registers[inst.Register] > topValue) topValue = registers[inst.Register];
+            }
+
+            return topValue.ToString();
         }
+
+
         Instruction ParseLine(string line)
         {
-            var match = Regex.Match(line, "([a-z]+) (inc|dec) ([0-9]+) if ([a-z]+) (\\>|\\<|\\>=|==|\\<=|!=) ([0-9]+)");
+            var match = Regex.Match(line, "([a-z]+) (inc|dec) (\\-?[0-9]+) if ([a-z]+) (\\>|\\<|\\>=|==|\\<=|!=) (\\-?[0-9]+)");
             return new Instruction
             {
                 Register = match.Groups[1].Value,
@@ -41,7 +89,7 @@ namespace AdventOfCode2017.Puzzles.Day8
                 case ">":
                     return Comparer.GreaterThan;
                 case "<":
-                    return Comparer.LessThank;
+                    return Comparer.LessThan;
                 case ">=":
                     return Comparer.GreaterThanOrEqual;
                 case "==":
@@ -56,21 +104,4 @@ namespace AdventOfCode2017.Puzzles.Day8
             }
         }
     }
-
-    //[DebuggerDisplay("Name = {Name}, Children = {Children.Count}, WeightSum = {WeightSum}")]
-    //class Program
-    //{
-    //    public string Name { get; set; }
-    //    public int Weight { get; set; }
-    //    public int WeightSum
-    //    {
-    //        get
-    //        {
-    //            return this.Children.Select(q => q.Children).Sum(q => q.Sum(c => c.Weight));
-    //        }
-    //    }
-    //    public bool Moved { get; set; }
-    //    public List<Program> Children { get; set; }
-    //    public List<string> ChildNames { get; set; }
-    //}
 }
