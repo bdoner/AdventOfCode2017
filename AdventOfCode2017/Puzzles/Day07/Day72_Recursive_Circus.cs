@@ -6,14 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace AdventOfCode2017.Puzzles.Day7
+namespace AdventOfCode2017.Puzzles.Day07
 {
-    public class Day71_Recursive_Circus : IPuzzle
+    public class Day72_Recursive_Circus : IPuzzle
     {
         public string Run()
         {
             var programs =
-                File.ReadAllLines("Puzzles\\Day7\\input_example.txt")
+                File.ReadAllLines("Puzzles\\Day7\\input.txt")
                 .Select(ParseLine)
                 .ToList();
 
@@ -24,10 +24,27 @@ namespace AdventOfCode2017.Puzzles.Day7
                 if (programs.Count != pbc) i = 0;
             }
 
+            var groups = new List<IEnumerable<IGrouping<int, Program>>>();
+            GroupWeights(programs, groups);
+            var imbalancedGroup = groups.Where(q => q.Count() != 1).ToList();
+            var fg = imbalancedGroup.First();
+            var lg = imbalancedGroup.Last();
+
 
             return programs.Single().Name;
         }
-        
+
+        void GroupWeights(List<Program> programs, List<IEnumerable<IGrouping<int, Program>>> groups)
+        {
+            if(programs.Count > 0)
+                groups.Add(programs.GroupBy(q => q.WeightSum));
+
+            foreach (var p in programs)
+            {
+                
+                GroupWeights(p.Children, groups);
+            }
+        }
 
         void ResolveChildNames(Program program, List<Program> programs)
         {
@@ -101,20 +118,20 @@ namespace AdventOfCode2017.Puzzles.Day7
         }
     }
 
-    [DebuggerDisplay("Name = {Name}, Children = {Children.Count}, WeightSum = {WeightSum}")]
-    class Program
-    {
-        public string Name { get; set; }
-        public int Weight { get; set; }
-        public int WeightSum
-        {
-            get
-            {
-                return this.Weight + this.Children.Sum(q => q.WeightSum);
-            }
-        }
-        public bool Moved { get; set; }
-        public List<Program> Children { get; set; }
-        public List<string> ChildNames { get; set; }
-    }
+    //[DebuggerDisplay("Name = {Name}, Children = {Children.Count}, WeightSum = {WeightSum}")]
+    //class Program
+    //{
+    //    public string Name { get; set; }
+    //    public int Weight { get; set; }
+    //    public int WeightSum
+    //    {
+    //        get
+    //        {
+    //            return this.Children.Select(q => q.Children).Sum(q => q.Sum(c => c.Weight));
+    //        }
+    //    }
+    //    public bool Moved { get; set; }
+    //    public List<Program> Children { get; set; }
+    //    public List<string> ChildNames { get; set; }
+    //}
 }

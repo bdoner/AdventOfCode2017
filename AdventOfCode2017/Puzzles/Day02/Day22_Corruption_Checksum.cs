@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace AdventOfCode2017.Puzzles.Day2
+namespace AdventOfCode2017.Puzzles.Day02
 {
     public class Day22_Corruption_Checksum : IPuzzle
     {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace AdventOfCode2017.Puzzles.Day9
+namespace AdventOfCode2017.Puzzles.Day09
 {
     public class Day92_Stream_Processing : IPuzzle
     {

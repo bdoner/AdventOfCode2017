@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace AdventOfCode2017.Puzzles.Day4
+namespace AdventOfCode2017.Puzzles.Day04
 {
     public class Day41_High_Entropy_Passphrase : IPuzzle
     {

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AdventOfCode2017.Puzzles.Day3
+namespace AdventOfCode2017.Puzzles.Day03
 {
     public class Day32_Spiral_Memory : IPuzzle
     {

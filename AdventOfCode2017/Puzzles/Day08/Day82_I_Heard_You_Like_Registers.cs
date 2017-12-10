@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace AdventOfCode2017.Puzzles.Day8
+namespace AdventOfCode2017.Puzzles.Day08
 {
-    public class Day81_I_Heard_You_Like_Registers : IPuzzle
+    public class Day82_I_Heard_You_Like_Registers : IPuzzle
     {
         public string Run()
         {
@@ -17,6 +17,7 @@ namespace AdventOfCode2017.Puzzles.Day8
                 .Select(ParseLine)
                 .ToList();
 
+            int topValue = 0;
             var registers = new Dictionary<string, int>();
             instructions.ForEach(i =>
             {
@@ -60,9 +61,10 @@ namespace AdventOfCode2017.Puzzles.Day8
                         registers[inst.Register] += inst.Value;
                         break;
                 }
+                if (registers[inst.Register] > topValue) topValue = registers[inst.Register];
             }
 
-            return registers.OrderByDescending(r => r.Value).First().Value.ToString();
+            return topValue.ToString();
         }
 
 
@@ -101,33 +103,5 @@ namespace AdventOfCode2017.Puzzles.Day8
                     throw new NotImplementedException(strRep);
             }
         }
-    }
-
-    [DebuggerDisplay("Reg = {Register}, Op = {Operation}, Value = {Value}")]
-    class Instruction
-    {
-        public string Register { get; set; }
-        public Operation Operation { get; set; }
-        public int Value { get; set; }
-
-        public string CompReg { get; set; }
-        public Comparer Comparer { get; set; }
-        public int CompVal { get; set; }
-    }
-
-    enum Operation
-    {
-        Dec,
-        Inc
-    }
-
-    enum Comparer
-    {
-        GreaterThan,
-        LessThan,
-        Equal,
-        LessThanOrEqual,
-        GreaterThanOrEqual,
-        NotEqual
     }
 }

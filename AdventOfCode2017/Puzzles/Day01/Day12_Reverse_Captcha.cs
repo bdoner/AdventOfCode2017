@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 
-namespace AdventOfCode2017.Puzzles.Day1
+namespace AdventOfCode2017.Puzzles.Day01
 {
     class Day12_Reverse_Captcha : IPuzzle
     {

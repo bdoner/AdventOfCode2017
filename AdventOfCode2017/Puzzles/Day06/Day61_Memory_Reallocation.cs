@@ -5,9 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace AdventOfCode2017.Puzzles.Day6
+namespace AdventOfCode2017.Puzzles.Day06
 {
-    public class Day62_Memory_Reallocation : IPuzzle
+    public class Day61_Memory_Reallocation : IPuzzle
     {
         public string Run()
         {
@@ -27,33 +27,33 @@ namespace AdventOfCode2017.Puzzles.Day6
             //};
 
             var seen = new List<int[]>();
+            var cycles = 0;
 
-            while (true)
+            while(true)
             {
-                if (seen.Any(q => q.ToList().SequenceEqual(banks.Select(s => s.Value))))
-                {
-                    seen.Add(banks.Select(q => q.Value).ToArray());
-                    break;
-                }
-
-                seen.Add(banks.Select(q => q.Value).ToArray());
-
                 var bigBank = banks.OrderByDescending(q => q.Value).ThenBy(q => q.Index).First();
                 var blocks = bigBank.Value;
                 bigBank.Value = 0;
-                for (var i = (bigBank.Index + 1) % banks.Count; i < ((bigBank.Index + 1) % banks.Count) + blocks; i++)
+                for(var i = (bigBank.Index + 1) % banks.Count; i < ((bigBank.Index + 1) % banks.Count) + blocks; i++)
                 {
                     banks[i % banks.Count].Value += 1;
-                }                
-            }
+                }
+                cycles++;
 
-            seen.Reverse();
-            var toFind = seen.First();
-            seen.RemoveAt(0);
-            var cycles = seen.FindIndex(0, q => q.SequenceEqual(toFind)) + 1;
+                if (seen.Any(q => q.ToList().SequenceEqual(banks.Select(s => s.Value))))
+                    break;
+
+                seen.Add(banks.Select(q => q.Value).ToArray());
+            }
 
             return cycles.ToString();
         }
     }
 
+    [DebuggerDisplay("Index = {Index}, Value = {Value}")]
+    class Bank
+    {
+        public int Index { get; set; }
+        public int Value { get; set; }
+    }
 }

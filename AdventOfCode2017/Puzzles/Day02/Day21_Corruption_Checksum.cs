@@ -2,7 +2,7 @@ using System.IO;
 using System;
 using System.Linq;
 
-namespace AdventOfCode2017.Puzzles.Day2
+namespace AdventOfCode2017.Puzzles.Day02
 {
     public class Day21_Corruption_Checksum : IPuzzle
     {
