@@ -16,17 +16,53 @@ namespace AdventOfCode2017.Puzzles.Day11
                 File.ReadAllText("Puzzles\\Day11\\input.txt")
                 .Split(",", StringSplitOptions.RemoveEmptyEntries);
 
-            var groups = input
-                .GroupBy(q => q)
-                .Select(q => new KeyValuePair<string, int>(q.Key, q.Count()))
-                .ToDictionary(k => k.Key, v => v.Value);
+            var coord = new Coordinate() { X = 0, Y = 0, Z = 0 };
+            //var groups = input
+                //.GroupBy(q => q);
+                //.Select(q => new KeyValuePair<string, int>(q.Key, q.Count()))
+                //.ToDictionary(k => k.Key, v => v.Value);
 
-            var n_s = groups["n"] - groups["s"];
-            var ne_sw = groups["ne"] - groups["sw"];
-            var se_nw = groups["se"] - groups["nw"];
+            foreach(var dir in input)
+            {
+                switch (dir)
+                {
+                    case "n":
+                        coord.Y++;
+                        coord.Z--;
+                        break;
+                    case "ne":
+                        coord.X++;
+                        coord.Z--;
+                        break;
+                    case "se":
+                        coord.Y--;
+                        coord.X++;
+                        break;
+                    case "s":
+                        coord.Y--;
+                        coord.Z++;
+                        break;                    
+                    case "sw":
+                        coord.X--;
+                        coord.Z++;
+                        break;                    
+                    case "nw":
+                        coord.X--;
+                        coord.Y++;
+                        break;
+
+                    default:
+                        throw new NotImplementedException(dir);
+                }
+            }
+            
 
             //a < 987 & a > 723
-            return (n_s + ne_sw + se_nw).ToString();
+            return ((Math.Abs(coord.X) + Math.Abs(coord.Y) + Math.Abs(coord.Z)) / 2).ToString();
         }
+    }
+    struct Coordinate
+    {
+        public int X, Y, Z;
     }
 }
