@@ -16,9 +16,50 @@ namespace AdventOfCode2017.Puzzles.Day11
                 File.ReadAllText("Puzzles\\Day11\\input.txt")
                 .Split(",", StringSplitOptions.RemoveEmptyEntries);
 
-            var groups = input.GroupBy(q => q).Select(q => (q.Key, q.Count()));
+            var furthest = 0;
+            var coord = new Coordinate() { X = 0, Y = 0, Z = 0 };
+            foreach (var dir in input)
+            {
+                switch (dir)
+                {
+                    case "n":
+                        coord.Y++;
+                        coord.Z--;
+                        break;
+                    case "ne":
+                        coord.X++;
+                        coord.Z--;
+                        break;
+                    case "se":
+                        coord.Y--;
+                        coord.X++;
+                        break;
+                    case "s":
+                        coord.Y--;
+                        coord.Z++;
+                        break;
+                    case "sw":
+                        coord.X--;
+                        coord.Z++;
+                        break;
+                    case "nw":
+                        coord.X--;
+                        coord.Y++;
+                        break;
 
-            return 0.ToString();
+                    default:
+                        throw new NotImplementedException(dir);
+                }
+                var distance = GetDistance(coord);
+                if (distance > furthest) furthest = distance;
+            }
+
+            return furthest.ToString();
+        }
+
+        int GetDistance(Coordinate coord)
+        {
+            return ((Math.Abs(coord.X) + Math.Abs(coord.Y) + Math.Abs(coord.Z)) / 2);
         }
     }
 }

@@ -17,12 +17,7 @@ namespace AdventOfCode2017.Puzzles.Day11
                 .Split(",", StringSplitOptions.RemoveEmptyEntries);
 
             var coord = new Coordinate() { X = 0, Y = 0, Z = 0 };
-            //var groups = input
-                //.GroupBy(q => q);
-                //.Select(q => new KeyValuePair<string, int>(q.Key, q.Count()))
-                //.ToDictionary(k => k.Key, v => v.Value);
-
-            foreach(var dir in input)
+            foreach (var dir in input)
             {
                 switch (dir)
                 {
@@ -41,11 +36,11 @@ namespace AdventOfCode2017.Puzzles.Day11
                     case "s":
                         coord.Y--;
                         coord.Z++;
-                        break;                    
+                        break;
                     case "sw":
                         coord.X--;
                         coord.Z++;
-                        break;                    
+                        break;
                     case "nw":
                         coord.X--;
                         coord.Y++;
@@ -55,12 +50,11 @@ namespace AdventOfCode2017.Puzzles.Day11
                         throw new NotImplementedException(dir);
                 }
             }
-            
 
-            //a < 987 & a > 723
             return ((Math.Abs(coord.X) + Math.Abs(coord.Y) + Math.Abs(coord.Z)) / 2).ToString();
         }
     }
+
     struct Coordinate
     {
         public int X, Y, Z;
