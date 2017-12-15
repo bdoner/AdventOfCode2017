@@ -12,38 +12,51 @@ namespace AdventOfCode2017.Puzzles.Day12
     {
         public string Run()
         {
-            var input =
+            var programs =
                 File.ReadAllLines("Puzzles\\Day12\\input_example.txt")
                 .Select(ParseLine)
                 .ToList();
 
             var pc = 0;
-            while (true)
+            for (var i = 0; i < programs.Count; i++)
             {
-
+                var p = programs[i];
+                if(p.Id == 0)
+                {
+                    pc++;
+                    programs[i].Connected = true;
+                    continue;
+                }
+                var prev = programs.TakeWhile(q => q.Id != p.Id).Where(q => q.Connected).ToList();
+                if(!p.Connected && prev.SelectMany(q => q.ChildIds).Any(q => q == p.Id))
+                {
+                    pc++;
+                    programs[i].Connected = true;
+                    i = 0;
+                }
             }
 
-            return input.Count().ToString();
+            return pc.ToString();
         }
 
-        Program ParseLine(string line)
+        Prog ParseLine(string line)
         {
             //6 <-> 4, 5
-            return new Program
+            return new Prog
             {
                 Id = int.Parse(line.Split(" ").First()),
                 ChildIds = line.Remove(0, line.IndexOf(">") + 1).Split(",", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList(),
-                Children = new List<Program>()
+                Connected = false
             };
 
         }
     }
 
-    class Program
+    [DebuggerDisplay("Id: {Id}, ChildIds: {ChildIds.Count}, Connected: {Connected}")]
+    class Prog
     {
         public int Id { get; set; }
         public List<int> ChildIds { get; set; }
-        public List<Program> Children { get; set; }
-        public int TotalChildren { get { return Children.Count + TotalChildren; } }
+        public bool Connected { get; set; }
     }
 }
