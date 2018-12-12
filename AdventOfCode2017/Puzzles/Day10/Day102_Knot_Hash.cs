@@ -23,7 +23,7 @@ namespace AdventOfCode2017.Puzzles.Day10
             return KnotHash(input);
         }
 
-        private string KnotHash(string data)
+        public static string KnotHash(string data)
         {
             var input =
                 data
